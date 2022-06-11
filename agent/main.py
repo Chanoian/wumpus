@@ -1,4 +1,3 @@
-from asyncio import current_task
 from pathlib import Path
 import os, sys
 
@@ -12,14 +11,12 @@ sys.path.append(env_path)
 from env.environment import WumpusEnv
 from env.percept import Percept
 
-class WumpusAgent(Percept):
-    def __init__(self) -> None:
-        pass
-        
-
-    def move_forward(self):
-        current_agent_index = (1,1)
-        Percept.sense_breeze(current_agent_index=current_agent_index)
+class WumpusAgent():
+    def __init__(self):
+        self.current_agent_index = (1,1)
+    
+    def move_forward(self, percept_instance):
+        Percept.sense_breeze(percept_instance, self.current_agent_index)
 
     def move_turn_left(self):
         pass
@@ -54,10 +51,7 @@ new_env.set_glitter()
 new_env.print_sensors_map()
 print("======")
 
-new_percept = Percept(new_env.sensors_map)
-new_percept.sense_stench(current_agent_index=(1,1))
-new_percept.sense_breeze(current_agent_index=(1,1))
-new_percept.gold_found(current_agent_index=(1,1))
+new_percept = Percept(new_env.sensors_map, new_env.game_map)
 
 new_agent = WumpusAgent()
-new_agent.move_forward()
+new_agent.move_forward(new_percept)
